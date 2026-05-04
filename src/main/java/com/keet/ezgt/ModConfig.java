@@ -29,7 +29,7 @@ public class ModConfig {
         @Config.Name("easycoils")
         public static boolean easyCoils;
 
-        @Config.Comment("Multiplier for GT ore vein density. 2.0 = double density for all veins.")
+        @Config.Comment("Multiplier for GT ore vein density. 2.0 = double density for all veins. Works great with GTNHRates!")
         @Config.RangeFloat(min = 0.1F, max = 8F)
         public static float veinRichness = 2.0F;
     }

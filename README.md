@@ -11,7 +11,7 @@ By default, EZGT changes:
 
 Miscellaneous:
 
-* Almost all values are configurable — tweak multipliers to your liking
+* Almost all values are configurable. tweak multipliers to your liking
 * Casing and circuit changes apply to both singleplayer and dedicated servers
 * Vein richness applies at world generation time and requires a new world or new chunks
 

@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.keet.ezgt.mixins",
+  "refmap": "mixins.ezgt.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "OreMixBuilderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,6 +1,7 @@
 package com.keet.ezgt;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.item.ItemStack;
@@ -36,6 +37,7 @@ public class EventsHandler {
         modifiedRecipes = true;
         EZGT.LOG.info("Applying configured EZGT recipe updates from {}", source);
         modifyCasingRecipes();
+        modifyCasingCraftingRecipes();
         modifyCircuitRecipes();
     }
 
@@ -73,6 +75,29 @@ public class EventsHandler {
             return ModConfig.Rates.easyCoils;
         }
         return lower.contains("blockcasings");
+    }
+
+    private void modifyCasingCraftingRecipes() {
+        if (ModConfig.Rates.gtCasingAssemblerOutputs == 1.0f) return;
+
+        List<?> recipes = net.minecraft.item.crafting.CraftingManager.getInstance()
+            .getRecipeList();
+        int count = 0;
+
+        for (Object obj : recipes) {
+            if (!(obj instanceof net.minecraft.item.crafting.IRecipe)) continue;
+            net.minecraft.item.crafting.IRecipe recipe = (net.minecraft.item.crafting.IRecipe) obj;
+            ItemStack output = recipe.getRecipeOutput();
+            if (output == null) continue;
+            if (isGtCasingOutput(output)) {
+                output.stackSize = Math.min(
+                    Math.max(1, (int) (output.stackSize * ModConfig.Rates.gtCasingAssemblerOutputs)),
+                    output.getMaxStackSize());
+                count++;
+            }
+        }
+
+        EZGT.LOG.info("Modified {} GT casing crafting recipes", count);
     }
 
     private void modifyCircuitRecipes() {

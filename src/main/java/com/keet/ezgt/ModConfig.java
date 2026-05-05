@@ -32,6 +32,10 @@ public class ModConfig {
         @Config.Comment("Multiplier for GT ore vein density. 2.0 = double density for all veins. Works great with GTNHRates!")
         @Config.RangeFloat(min = 0.1F, max = 8F)
         public static float veinRichness = 2.0F;
+
+        @Config.Comment("Multiplier for GT electric motor assembler and crafting recipe outputs")
+        @Config.RangeFloat(min = 0.1F, max = 64F)
+        public static float easyMotors = 2F;
     }
 
     public static void registerConfigClasses() {

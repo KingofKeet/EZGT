@@ -39,6 +39,27 @@ public class EventsHandler {
         modifyCasingRecipes();
         modifyCasingCraftingRecipes();
         modifyCircuitRecipes();
+        modifyMotorRecipes();
+
+        // TEMP DEBUG
+        RecipeMap<?> asl = RecipeMap.ALL_RECIPE_MAPS.get("gt.recipe.fakeAssemblylineProcess");
+        if (asl != null) {
+            EZGT.LOG.info(
+                "ASL recipe map found, recipe count: {}",
+                asl.getAllRecipes()
+                    .size());
+            asl.getAllRecipes()
+                .stream()
+                .findFirst()
+                .ifPresent(r -> {
+                    EZGT.LOG.info(
+                        "ASL first recipe class: {}",
+                        r.getClass()
+                            .getName());
+                    if (r.mOutputs != null && r.mOutputs.length > 0 && r.mOutputs[0] != null)
+                        EZGT.LOG.info("ASL first recipe output: {}", r.mOutputs[0].getDisplayName());
+                });
+        }
     }
 
     private void modifyCasingRecipes() {
@@ -149,6 +170,62 @@ public class EventsHandler {
             } else if (matchesAny(output, assemblyOutputs)) {
                 output.stackSize = clampedStackSize(output, assemblyAmt);
                 counts[2]++;
+            }
+        }
+    }
+
+    private void modifyMotorRecipes() {
+        EZGT.LOG.info("Assembly line recipe count: {}", GTRecipe.RecipeAssemblyLine.sAssemblylineRecipes.size());
+
+        for (GTRecipe.RecipeAssemblyLine recipe : GTRecipe.RecipeAssemblyLine.sAssemblylineRecipes) {
+            if (recipe.mOutput == null) continue;
+            if (recipe.mOutput.getDisplayName()
+                .toLowerCase()
+                .contains("motor")) {
+                EZGT.LOG.info(
+                    "ASL motor found: {} stackSize: {}",
+                    recipe.mOutput.getDisplayName(),
+                    recipe.mOutput.stackSize);
+            }
+        }
+
+        if (ModConfig.Rates.easyMotors == 1.0f) return;
+
+        ItemStack[] motorOutputs = { ItemList.Electric_Motor_LV.get(1L), ItemList.Electric_Motor_MV.get(1L),
+            ItemList.Electric_Motor_HV.get(1L), ItemList.Electric_Motor_EV.get(1L), ItemList.Electric_Motor_IV.get(1L),
+            ItemList.Electric_Motor_LuV.get(1L), ItemList.Electric_Motor_ZPM.get(1L),
+            ItemList.Electric_Motor_UV.get(1L), ItemList.Electric_Motor_UHV.get(1L),
+            ItemList.Electric_Motor_UEV.get(1L), ItemList.Electric_Motor_UIV.get(1L),
+            ItemList.Electric_Motor_UMV.get(1L), ItemList.Electric_Motor_UXV.get(1L), };
+
+        int assemblerCount = 0;
+        int craftingCount = 0;
+
+        RecipeMap<?> assembler = RecipeMap.ALL_RECIPE_MAPS.get("gt.recipe.assembler");
+        if (assembler != null) {
+            for (GTRecipe recipe : assembler.getAllRecipes()) {
+                if (recipe.mOutputs == null || recipe.mOutputs.length == 0) continue;
+                ItemStack output = recipe.mOutputs[0];
+                if (output == null) continue;
+                if (matchesAny(output, motorOutputs)) {
+                    output.stackSize = Math.min(
+                        Math.max(1, (int) (output.stackSize * ModConfig.Rates.easyMotors)),
+                        output.getMaxStackSize());
+                    assemblerCount++;
+                }
+            }
+        }
+
+        for (Object obj : net.minecraft.item.crafting.CraftingManager.getInstance()
+            .getRecipeList()) {
+            if (!(obj instanceof net.minecraft.item.crafting.IRecipe)) continue;
+            net.minecraft.item.crafting.IRecipe recipe = (net.minecraft.item.crafting.IRecipe) obj;
+            ItemStack output = recipe.getRecipeOutput();
+            if (output == null) continue;
+            if (matchesAny(output, motorOutputs)) {
+                output.stackSize = Math
+                    .min(Math.max(1, (int) (output.stackSize * ModConfig.Rates.easyMotors)), output.getMaxStackSize());
+                craftingCount++;
             }
         }
     }

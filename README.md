@@ -5,6 +5,7 @@ Lazy? Not enough hours in the day to progress in GTNH? Want easier progression w
 By default, EZGT changes:
 
 * GT machine casing recipes: **2x** output from both the Assembler and crafting table
+* GT ore processing bonus output chances: **2x** chance in Macerator, Ore Washer, Centrifuge, Thermal Centrifuge, Chemical Bath, and Electromagnetic Separator recipes
 * GT circuit assembler recipes: **2x** output for processors, **4x** for SoC recipes, **2x** for assemblies
 * GT Circuit Assembly Line recipes: **2x** output across the board **4x** for SoC recipes
 * GT ore vein density: **2x** richer veins across all dimensions

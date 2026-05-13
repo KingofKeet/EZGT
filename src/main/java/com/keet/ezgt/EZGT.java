@@ -1,15 +1,18 @@
 package com.keet.ezgt;
 
-import net.minecraftforge.common.MinecraftForge;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "ezgt", version = "1.0.0", name = "EZGT", acceptedMinecraftVersions = "[1.7.10]")
+@Mod(
+    modid = EZGT.MODID,
+    version = "1.0.0",
+    name = "EZGT",
+    acceptedMinecraftVersions = "[1.7.10]",
+    dependencies = "required-after:gregtech")
 public class EZGT {
 
     public static final String MODID = "ezgt";
@@ -18,9 +21,10 @@ public class EZGT {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ModConfig.registerConfigClasses();
-        MinecraftForge.EVENT_BUS.register(new EventsHandler());
-        FMLCommonHandler.instance()
-            .bus()
-            .register(new EventsHandler());
+    }
+
+    @Mod.EventHandler
+    public void loadComplete(FMLLoadCompleteEvent event) {
+        RecipeModifier.applyConfiguredRecipeUpdates();
     }
 }

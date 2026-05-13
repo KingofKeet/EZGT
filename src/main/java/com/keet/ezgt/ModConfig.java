@@ -19,6 +19,10 @@ public class ModConfig {
         @Config.RangeFloat(min = 0.1F, max = 64F)
         public static float gtCasingAssemblerOutputs = 2F;
 
+        @Config.Comment("[Requires restart] Multiplier for GT ore processing bonus output chances. 10000 = 100%, so a 500 chance becomes 1000 at 2x.")
+        @Config.RangeFloat(min = 0.1F, max = 64F)
+        public static float oreProcessingBonusOutputChances = 2F;
+
         @Config.Comment("[Requires restart] Makes circuit assembler / CAL recipes use Monifactory-style output ratios: processors output 2, SoC processor recipes output 4, and assemblies output 2.")
         @Config.DefaultBoolean(true)
         @Config.Name("easycircuits")
